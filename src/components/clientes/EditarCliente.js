@@ -1,11 +1,14 @@
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useState, useEffect} from 'react'
 import Swal from 'sweetalert2'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import clienteAxios from '../../config/axios'
 
-function NuevoCliente() {
+function EditarCliente(props) {
     const navigate = useNavigate()
-    const[cliente, guardarCliente] = useState({
+
+    const { id } = useParams()
+
+    const[cliente, datosCliente] = useState({
         nombre:'',
         apellido:'',
         empresa:'',
@@ -13,10 +16,24 @@ function NuevoCliente() {
         telefono:''
     })
 
+    // Query a la API
+    const consultarAPI = async () => {
+        const clienteConsulta = await clienteAxios.get(`/clientes/${id}`)
+
+        // colocar en el state
+        datosCliente(clienteConsulta.data)
+    }
+
+    // useEffect cuando el componente carga
+    useEffect( () => {
+        consultarAPI()
+    // eslint-disable-next-line
+    },[])
+
     // leer los datos del formulario
     const actualizarState = e => {
         // almancenar lo que usuario escribe en el state
-        guardarCliente({
+        datosCliente({
             ...cliente,
             [e.target.name] : e.target.value
         })
@@ -32,12 +49,10 @@ function NuevoCliente() {
         return valido
     }
 
-    // Añade en la rest API un cliente nuevo
-    const agregarCliente = e => {
+    // envia una peticion por axios para actualizar clientes
+    const actualizarCliente = e => {
         e.preventDefault()
-
-        // enviar peticion a axios
-        clienteAxios.post('/clientes', cliente)
+        clienteAxios.put(`/clientes/${cliente._id}`, cliente)
             .then(res => {
                 // Validar si hay errores de mongo
                 if(res.data.code === 11000){
@@ -48,8 +63,8 @@ function NuevoCliente() {
                     })
                 } else {
                     Swal.fire(
-                        'Se agregó el cliente',
-                        res.data.mensaje,
+                        'Correcto',
+                        'Se actualizo correctamente',
                         'success'
                     )
                 }
@@ -57,12 +72,14 @@ function NuevoCliente() {
                 navigate('/')
             })
     }
+
+
     return(
         <Fragment>
-            <h2>Nuevo Cliente</h2>
+            <h2>Editar Cliente</h2>
 
             <form
-                onSubmit={agregarCliente}
+                onSubmit={actualizarCliente}
             >
                 <legend>Llena todos los campos</legend>
 
@@ -72,6 +89,7 @@ function NuevoCliente() {
                         placeholder="Nombre Cliente" 
                         name="nombre"
                         onChange={actualizarState}
+                        value={cliente.nombre}
                     />
                 </div>
 
@@ -81,6 +99,7 @@ function NuevoCliente() {
                         placeholder="Apellido Cliente" 
                         name="apellido"
                         onChange={actualizarState}
+                        value={cliente.apellido}
                     />
                 </div>
             
@@ -90,6 +109,7 @@ function NuevoCliente() {
                         placeholder="Empresa Cliente" 
                         name="empresa"
                         onChange={actualizarState}
+                        value={cliente.empresa}
                     />
                 </div>
 
@@ -99,6 +119,7 @@ function NuevoCliente() {
                         placeholder="Email Cliente" 
                         name="email"
                         onChange={actualizarState}
+                        value={cliente.email}
                     />
                 </div>
 
@@ -108,13 +129,14 @@ function NuevoCliente() {
                         placeholder="Teléfono Cliente" 
                         name="telefono"
                         onChange={actualizarState}
+                        value={cliente.telefono}
                     />
                 </div>
 
                 <div className="enviar">
                     <input type="submit" 
-                        class="btn btn-azul" 
-                        value="Agregar Cliente"
+                        className="btn btn-azul" 
+                        value="Guardar Cliente"
                         disabled={validarCliente()}
                     />
                 </div>
@@ -125,4 +147,4 @@ function NuevoCliente() {
     )
 }
 
-export default NuevoCliente
+export default EditarCliente

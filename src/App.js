@@ -10,6 +10,7 @@ import Navegacion from './components/layout/Navegacion';
 // Componentes
 import Clientes from './components/clientes/Clientes';
 import NuevoCliente from './components/clientes/NuevoCliente';
+import EditarCliente from './components/clientes/EditarCliente';
 import Productos from './components/productos/Productos';
 import Pedidos from './components/pedidos/Pedidos';
 
@@ -25,6 +26,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Clientes/>}/>
               <Route path="/clientes/nuevo" element={<NuevoCliente/>}/>
+              <Route path="/clientes/editar/:id" element={<EditarCliente/>}/>
               <Route path="/productos" element={<Productos/>}/>
               <Route path="/pedidos" element={<Pedidos/>}/>
             </Routes>
