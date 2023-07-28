@@ -9,6 +9,7 @@ import Navegacion from './components/layout/Navegacion';
 
 // Componentes
 import Clientes from './components/clientes/Clientes';
+import NuevoCliente from './components/clientes/NuevoCliente';
 import Productos from './components/productos/Productos';
 import Pedidos from './components/pedidos/Pedidos';
 
@@ -18,11 +19,12 @@ function App() {
   <BrowserRouter>
     <Fragment>
         <Header />
-        <div class="grid contenedor contenido-principal">
+        <div className="grid contenedor contenido-principal">
           <Navegacion />
-          <main class="caja-contenido col-9">
+          <main className="caja-contenido col-9">
             <Routes>
               <Route path="/" element={<Clientes/>}/>
+              <Route path="/clientes/nuevo" element={<NuevoCliente/>}/>
               <Route path="/productos" element={<Productos/>}/>
               <Route path="/pedidos" element={<Pedidos/>}/>
             </Routes>
