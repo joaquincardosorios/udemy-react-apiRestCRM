@@ -3,7 +3,7 @@ import Swal from 'sweetalert2'
 import { useNavigate, useParams } from 'react-router-dom';
 import clienteAxios from '../../config/axios'
 
-function EditarCliente(props) {
+function EditarCliente() {
     const navigate = useNavigate()
 
     const { id } = useParams()
