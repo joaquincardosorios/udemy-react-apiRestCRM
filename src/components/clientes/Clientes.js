@@ -4,6 +4,7 @@ import React, { useEffect, useState, Fragment } from 'react'
 import clienteAxios from '../../config/axios'
 import Cliente from './Cliente'
 import { Link } from 'react-router-dom'
+import Spinner from '../layout/Spinner'
 
 
 function Clientes() {
@@ -13,18 +14,19 @@ function Clientes() {
     const [clientes, guardarClientes] = useState([])
 
     //query a la API
-    const consultarAPI = async () => {
-        const clientesConsulta = await clienteAxios.get('/clientes')
-
-        // Colocar el resultado en el state
-        guardarClientes(clientesConsulta.data)
-
-    }
-
+    
     //use effect es similar a componentsdidmount y willmount
     useEffect( () => {
+        const consultarAPI = async () => {
+            const clientesConsulta = await clienteAxios.get('/clientes')
+            // Colocar el resultado en el state
+            guardarClientes(clientesConsulta.data)
+        }
         consultarAPI();
     }, [clientes])
+
+    // spinner de carga
+    if(!clientes.length) return <Spinner />
 
     return (
         <Fragment>
