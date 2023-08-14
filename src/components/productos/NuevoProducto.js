@@ -46,7 +46,7 @@ function NuevoProducto() {
 
             if (res.status === 200){
                 Swal.fire(
-                    'Agregaro Correctamente',
+                    'Agrego Correctamente',
                     res.data.mensaje,
                     'success'
                 )
