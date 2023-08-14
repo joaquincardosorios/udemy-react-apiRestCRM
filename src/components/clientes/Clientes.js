@@ -18,12 +18,17 @@ function Clientes() {
     //use effect es similar a componentsdidmount y willmount
     useEffect( () => {
         const consultarAPI = async () => {
-            const clientesConsulta = await clienteAxios.get('/clientes')
-            // Colocar el resultado en el state
-            guardarClientes(clientesConsulta.data)
+            try {
+                const clientesConsulta = await clienteAxios.get('/clientes')
+                // Colocar el resultado en el state
+                guardarClientes(clientesConsulta.data)
+                
+            } catch (error) {
+                console.error('Error en la solicitud:', error);
+            }
         }
         consultarAPI();
-    }, [clientes])
+    }, [])
 
     // spinner de carga
     if(!clientes.length) return <Spinner />

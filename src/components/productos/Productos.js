@@ -16,7 +16,7 @@ function Productos() {
             guardarProductos(productosConsulta.data)
         }
         consultarAPI();
-    }, [productos])
+    }, [])
 
     // spinner de carga
     if(!productos.length) return <Spinner />

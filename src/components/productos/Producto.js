@@ -39,7 +39,7 @@ function Producto({producto}) {
                 <p className="nombre">{nombre}</p>
                 <p className="precio">$ {precio} </p>
                 { imagen ? (
-                    <img src={`http://localhost:5000/${imagen}`} alt='hola'/>
+                    <img src={`http://192.168.1.114:10001/${imagen}`} alt='hola'/>
                 ) : null
                 }
             </div>

@@ -121,7 +121,7 @@ function EditarProducto() {
                 <div className="campo">
                     <label>Imagen:</label>
                     { imagen ? (
-                        <img src={`http://localhost:5000/${imagen}`} alt="imagen" width="300"/>
+                        <img src={`http://192.168.1.114:10001/${imagen}`} alt="imagen" width="300"/>
                     ) : null}
                     <input 
                         type="file"  
