@@ -17,6 +17,7 @@ import NuevoProducto from './components/productos/NuevoProducto';
 import EditarProducto from './components/productos/EditarProducto';
 
 import Pedidos from './components/pedidos/Pedidos';
+import NuevoPedido from './components/pedidos/NuevoPedido';
 
 
 
@@ -36,6 +37,7 @@ function App() {
               <Route path="/productos/nuevo" element={<NuevoProducto/>}/>
               <Route path="/productos/editar/:id" element={<EditarProducto/>}/>
               <Route path="/pedidos" element={<Pedidos/>}/>
+              <Route path="/pedidos/nuevo/:id" element={<NuevoPedido/>}/>
             </Routes>
           </main>
         </div>
