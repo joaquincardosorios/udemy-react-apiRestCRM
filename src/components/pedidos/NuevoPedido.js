@@ -6,6 +6,7 @@ import FormCantidadProducto from './FormCantidadProducto';
 import Swal from 'sweetalert2'
 
 function NuevoPedido(props) {
+    const navigate = useNavigate()
     // extraer id cliente
     const {id} = useParams()
     
@@ -76,6 +77,12 @@ function NuevoPedido(props) {
 
     }
 
+    // eliminar producto del state
+    const eliminarProducto = id => {
+        const todosProductos = productos.filter(producto => producto.producto !== id)
+        setProductos(todosProductos)
+    }
+
     // actualizar total a pagar
     const actualizarTotal = () => {
         // si el arreglo de los producto es igual a 0: el total es cero
@@ -90,6 +97,41 @@ function NuevoPedido(props) {
         //recorrer todos los productos y sus cantidades y precios
         productos.map( producto => nuevoTotal += producto.cantidad * producto.precio)
         setTotal(nuevoTotal)
+    }
+
+    const enviarPedido = async(e) => {
+        e.preventDefault()
+        console.log(productos)
+
+        // construir el objeto
+        const pedido = {
+            cliente: id,
+            pedido: productos,
+            total: total
+        }
+        
+
+        // almacenarlos en la DB
+        const resultado = await clienteAxios.post(`/pedidos`, pedido)
+
+        // leer resultado
+        if(resultado.status === 200){
+            // alerta todo bien
+            Swal.fire({
+                icon: 'success',
+                title:'Correcto',
+                text: resultado.data.mensaje
+            })
+        } else {
+            // alerta error
+            Swal.fire({
+                icon: 'error',
+                title:'Hubo un error',
+                text: 'Intenta nuevamente'
+            })
+        }
+
+        navigate('/pedidos')
     }
     return(
         <>
@@ -112,13 +154,16 @@ function NuevoPedido(props) {
                         key={producto.producto} 
                         restarProductos={restarProductos}
                         aumentarProductos={aumentarProductos}
+                        eliminarProducto={eliminarProducto}
                         index={index}
                     />
                 ))}
             </ul>
             <p className='total'>Total a Pagar: <span>$ {total}</span></p>
             { total > 0 ? (
-                <form>
+                <form
+                    onSubmit={e => enviarPedido(e)}
+                >
                     <input 
                         type='submit'
                         className='btn btn-verde btn-block'
