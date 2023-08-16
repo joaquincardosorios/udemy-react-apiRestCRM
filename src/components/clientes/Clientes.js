@@ -1,34 +1,51 @@
-import React, { useEffect, useState, Fragment } from 'react'
+import React, { useEffect, useState, Fragment, useContext } from 'react'
 
 // importar clientes axios
 import clienteAxios from '../../config/axios'
 import Cliente from './Cliente'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Spinner from '../layout/Spinner'
 
+import { CRMContext } from '../../context/CRMContext'
 
 function Clientes() {
-
+    const navigate = useNavigate()
     // Trabajar con el state
     //cliente = state,  guardarCliente = funcion para guardar el state
     const [clientes, guardarClientes] = useState([])
 
+    const [auth, setAuth] = useContext(CRMContext)
+    console.log(auth)
     //query a la API
     
     //use effect es similar a componentsdidmount y willmount
     useEffect( () => {
-        const consultarAPI = async () => {
-            try {
-                const clientesConsulta = await clienteAxios.get('/clientes')
-                // Colocar el resultado en el state
-                guardarClientes(clientesConsulta.data)
-                
-            } catch (error) {
-                console.error('Error en la solicitud:', error);
+        if(auth.token !== ''){
+            const consultarAPI = async () => {
+                try {
+                    const clientesConsulta = await clienteAxios.get('/clientes',{
+                        headers: {
+                            Authorization: `Bearer ${auth.token}`
+                        }
+                    })
+                    // Colocar el resultado en el state
+                    guardarClientes(clientesConsulta.data)
+                    
+                } catch (error) {
+                    if(error.response.status === 500){
+                        navigate('/iniciar-sesion')
+                    }
+                }
             }
+            consultarAPI();
+        } else {
+            navigate('/iniciar-sesion')
         }
-        consultarAPI();
     }, [])
+
+    if(!auth.auth){
+        navigate('/iniciar-sesion')
+    }
 
     // spinner de carga
     if(!clientes.length) return <Spinner />

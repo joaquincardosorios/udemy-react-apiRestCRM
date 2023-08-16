@@ -36,7 +36,7 @@ function NuevoPedido(props) {
         // si no hay resultado, una alerta, contrario agregarlo al state
         if(resultadoBusqueda.data[0]){
             let productoResultado = resultadoBusqueda.data[0]
-            if(productos.some(producto => producto._id == resultadoBusqueda.data[0]._id)) return
+            if(productos.some(producto => producto._id === resultadoBusqueda.data[0]._id)) return
             // Agregar la llave 'producto' (copia de id)
             productoResultado.producto = resultadoBusqueda.data[0]._id
             productoResultado.cantidad = 1
